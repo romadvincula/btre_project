@@ -1,5 +1,5 @@
 from email import message
-import re
+from contacts.models import Contacts
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
@@ -82,7 +82,15 @@ def logout(request):
 
 def dashboard(request):
     if request.user.is_authenticated:
-        return render(request, 'accounts/dashboard.html')
+        user_contacts = Contacts.objects.order_by('-contact_date').filter(
+            user_id=request.user.id
+        )
+
+        context={
+            'contacts': user_contacts
+        }
+
+        return render(request, 'accounts/dashboard.html', context)
     
     else:
         return redirect('login')

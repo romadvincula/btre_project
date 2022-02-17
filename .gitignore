@@ -10,3 +10,5 @@ venv
 venv39
 .vscode
 /static
+
+.env
