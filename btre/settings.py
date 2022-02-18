@@ -161,3 +161,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('email_host_user')
 EMAIL_HOST_PASSWORD = os.environ.get('email_host_password')
 EMAIL_USE_TLS = True
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
