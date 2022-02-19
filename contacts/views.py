@@ -4,6 +4,7 @@ from contacts.models import Contacts
 from django.core.mail import send_mail
 import os
 from dotenv import load_dotenv
+from helper.email_smtp_ssl import send_email
 
 # load local environment variables
 load_dotenv()
@@ -52,9 +53,24 @@ def contacts(request):
         #     [realtor_email, 'noreply.romadv@gmail.com'],
         #     fail_silently=False
         # )
+        email_message = """Subject: Property Listing Inquiry
+
+        There has been an inquiry for """ + listing + """. Sign into the admin panel for more info."""
+
+        email_success, email_error = send_email(
+            sender_email=os.environ.get('email_host_user'),
+            password=os.environ.get('email_host_password'),
+            receiver_email=[realtor_email, 'noreply.romadv@gmail.com'],
+            message=email_message
+        )
+
+        if not email_success:
+            messages.error(request, 
+            f'Unable to send request to realtor: {email_error}'
+            )
+            return redirect('/listings/' + listing_id)
 
         messages.success(request, 
         'Your request has been submitted, a realtor will back to you soon'
         )
-
         return redirect('/listings/' + listing_id)
