@@ -43,7 +43,6 @@ def contacts(request):
             message=message,
             user_id=user_id
         )
-        contacts.save()
 
         # send mail
         # send_mail(
@@ -70,6 +69,7 @@ def contacts(request):
             )
             return redirect('/listings/' + listing_id)
 
+        contacts.save()
         messages.success(request, 
         'Your request has been submitted, a realtor will back to you soon'
         )
